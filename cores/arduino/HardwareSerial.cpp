@@ -34,33 +34,33 @@ typedef struct
 
 static const SERIAL_ConfigGrp_t SERIAL_ConfigGrp[] =
 {
-    {USART_DATA_8BITS, USART_PARITY_EVEN, USART_STOP_1_BIT},   // SERIAL_7E1
-    {USART_DATA_8BITS, USART_PARITY_EVEN, USART_STOP_2_BIT},   // SERIAL_7E2
-    {USART_DATA_8BITS, USART_PARITY_ODD, USART_STOP_1_BIT},    // SERIAL_7O1
-    {USART_DATA_8BITS, USART_PARITY_ODD, USART_STOP_2_BIT},    // SERIAL_7O2
-    {USART_DATA_8BITS, USART_PARITY_EVEN, USART_STOP_0_5_BIT}, // SERIAL_7E0_5
-    {USART_DATA_8BITS, USART_PARITY_EVEN, USART_STOP_1_5_BIT}, // SERIAL_7E1_5
-    {USART_DATA_8BITS, USART_PARITY_ODD, USART_STOP_0_5_BIT},  // SERIAL_7O0_5
-    {USART_DATA_8BITS, USART_PARITY_ODD, USART_STOP_1_5_BIT},  // SERIAL_7O1_5
-
     {USART_DATA_8BITS, USART_PARITY_NONE, USART_STOP_1_BIT},   // SERIAL_8N1
     {USART_DATA_8BITS, USART_PARITY_NONE, USART_STOP_2_BIT},   // SERIAL_8N2
-    {USART_DATA_9BITS, USART_PARITY_EVEN, USART_STOP_1_BIT},   // SERIAL_8E1
-    {USART_DATA_9BITS, USART_PARITY_EVEN, USART_STOP_2_BIT},   // SERIAL_8E2
-    {USART_DATA_9BITS, USART_PARITY_ODD,  USART_STOP_1_BIT},   // SERIAL_8O1
-    {USART_DATA_9BITS, USART_PARITY_ODD,  USART_STOP_2_BIT},   // SERIAL_8O2
+    {USART_DATA_8BITS, USART_PARITY_EVEN, USART_STOP_1_BIT},   // SERIAL_8E1
+    {USART_DATA_8BITS, USART_PARITY_EVEN, USART_STOP_2_BIT},   // SERIAL_8E2
+    {USART_DATA_8BITS, USART_PARITY_ODD,  USART_STOP_1_BIT},   // SERIAL_8O1
+    {USART_DATA_8BITS, USART_PARITY_ODD,  USART_STOP_2_BIT},   // SERIAL_8O2
     {USART_DATA_8BITS, USART_PARITY_NONE, USART_STOP_0_5_BIT}, // SERIAL_8N0_5
     {USART_DATA_8BITS, USART_PARITY_NONE, USART_STOP_1_5_BIT}, // SERIAL_8N1_5
-    {USART_DATA_9BITS, USART_PARITY_EVEN, USART_STOP_0_5_BIT}, // SERIAL_8E0_5
-    {USART_DATA_9BITS, USART_PARITY_EVEN, USART_STOP_1_5_BIT}, // SERIAL_8E1_5
-    {USART_DATA_9BITS, USART_PARITY_ODD,  USART_STOP_0_5_BIT}, // SERIAL_8O0_5
-    {USART_DATA_9BITS, USART_PARITY_ODD,  USART_STOP_1_5_BIT}, // SERIAL_8O1_5
+    {USART_DATA_8BITS, USART_PARITY_EVEN, USART_STOP_0_5_BIT}, // SERIAL_8E0_5
+    {USART_DATA_8BITS, USART_PARITY_EVEN, USART_STOP_1_5_BIT}, // SERIAL_8E1_5
+    {USART_DATA_8BITS, USART_PARITY_ODD,  USART_STOP_0_5_BIT}, // SERIAL_8O0_5
+    {USART_DATA_8BITS, USART_PARITY_ODD,  USART_STOP_1_5_BIT}, // SERIAL_8O1_5
 
     {USART_DATA_9BITS, USART_PARITY_NONE, USART_STOP_1_BIT},   // SERIAL_9N1
     {USART_DATA_9BITS, USART_PARITY_NONE, USART_STOP_2_BIT},   // SERIAL_9N2
+    {USART_DATA_9BITS, USART_PARITY_EVEN, USART_STOP_1_BIT},   // SERIAL_9E1
+    {USART_DATA_9BITS, USART_PARITY_EVEN, USART_STOP_2_BIT},   // SERIAL_9E2
+    {USART_DATA_9BITS, USART_PARITY_ODD,  USART_STOP_1_BIT},   // SERIAL_9O1
+    {USART_DATA_9BITS, USART_PARITY_ODD,  USART_STOP_2_BIT},   // SERIAL_9O2
     {USART_DATA_9BITS, USART_PARITY_NONE, USART_STOP_0_5_BIT}, // SERIAL_9N0_5
     {USART_DATA_9BITS, USART_PARITY_NONE, USART_STOP_1_5_BIT}, // SERIAL_9N1_5
+    {USART_DATA_9BITS, USART_PARITY_EVEN, USART_STOP_0_5_BIT}, // SERIAL_9E0_5
+    {USART_DATA_9BITS, USART_PARITY_EVEN, USART_STOP_1_5_BIT}, // SERIAL_9E1_5
+    {USART_DATA_9BITS, USART_PARITY_ODD,  USART_STOP_0_5_BIT}, // SERIAL_9O0_5
+    {USART_DATA_9BITS, USART_PARITY_ODD,  USART_STOP_1_5_BIT}, // SERIAL_9O1_5
 };
+
 /**
   * @brief  串口对象构造函数
   * @param  串口外设地址
@@ -151,78 +151,55 @@ void HardwareSerial::begin(
         crm_periph_clock_enable(CRM_GPIOB_PERIPH_CLOCK, TRUE);
         crm_periph_clock_enable(CRM_USART3_PERIPH_CLOCK, TRUE);
     }
+#if defined (AT32F415Rx)
     else if(_USARTx == UART4)
     {
-        GPIOx = GPIOA;
-        Tx_Pin = GPIO_Pin_0;
-        Rx_Pin = GPIO_Pin_1;
+        GPIOx = GPIOF;
+        Tx_Pin = GPIO_Pin_4;
+        Rx_Pin = GPIO_Pin_5;
         USARTx_IRQn = UART4_IRQn;
 
-        crm_periph_clock_enable(CRM_GPIOA_PERIPH_CLOCK, TRUE);
+        crm_periph_clock_enable(CRM_GPIOF_PERIPH_CLOCK, TRUE);
         crm_periph_clock_enable(CRM_UART4_PERIPH_CLOCK, TRUE);
         crm_periph_clock_enable(CRM_IOMUX_PERIPH_CLOCK, TRUE);
-        gpio_pin_remap_config(UART4_GMUX_0010, TRUE);
+        gpio_pin_remap_config(UART4_GMUX_0001, TRUE);
     }
     else if(_USARTx == UART5)
     {
-        GPIOx = GPIOB;
-        Tx_Pin = GPIO_Pin_9;
-        Rx_Pin = GPIO_Pin_8;
+        GPIOx = GPIOD;
+        Tx_Pin = GPIO_Pin_2;
+        Rx_Pin = GPIO_Pin_2;
         USARTx_IRQn = UART5_IRQn;
 
-        crm_periph_clock_enable(CRM_GPIOB_PERIPH_CLOCK, TRUE);
-        crm_periph_clock_enable(CRM_UART5_PERIPH_CLOCK, TRUE);
-        crm_periph_clock_enable(CRM_IOMUX_PERIPH_CLOCK, TRUE);
-        gpio_pin_remap_config(UART5_GMUX_0001, TRUE);
-    }
-    else if (_USARTx == USART6)
-    {
-        GPIOx = GPIOA;
-        Tx_Pin = GPIO_Pin_4;
-        Rx_Pin = GPIO_Pin_5;
-        USARTx_IRQn = USART6_IRQn;
-
-        crm_periph_clock_enable(CRM_GPIOA_PERIPH_CLOCK, TRUE);
-        crm_periph_clock_enable(CRM_USART6_PERIPH_CLOCK, TRUE);
-        crm_periph_clock_enable(CRM_IOMUX_PERIPH_CLOCK, TRUE);
-        gpio_pin_remap_config(USART6_GMUX, TRUE);
-    }
-    else if (_USARTx == UART7)
-    {
-        GPIOx = GPIOB;
-        Tx_Pin = GPIO_Pin_4;
-        Rx_Pin = GPIO_Pin_3;
-        USARTx_IRQn = UART7_IRQn;
-
-        crm_periph_clock_enable(CRM_GPIOB_PERIPH_CLOCK, TRUE);
-        crm_periph_clock_enable(CRM_UART7_PERIPH_CLOCK, TRUE);
-        crm_periph_clock_enable(CRM_IOMUX_PERIPH_CLOCK, TRUE);
-        gpio_pin_remap_config(UART7_GMUX, TRUE);
-    }
-    else if (_USARTx == UART8)
-    {
-        GPIOx = GPIOC;
-        Tx_Pin = GPIO_Pin_2;
-        Rx_Pin = GPIO_Pin_3;
-        USARTx_IRQn = UART8_IRQn;
-
         crm_periph_clock_enable(CRM_GPIOC_PERIPH_CLOCK, TRUE);
-        crm_periph_clock_enable(CRM_UART8_PERIPH_CLOCK, TRUE);
-        crm_periph_clock_enable(CRM_IOMUX_PERIPH_CLOCK, TRUE);
-        gpio_pin_remap_config(UART8_GMUX, TRUE);
+        crm_periph_clock_enable(CRM_GPIOD_PERIPH_CLOCK, TRUE);
+        crm_periph_clock_enable(CRM_UART5_PERIPH_CLOCK, TRUE);
+        // crm_periph_clock_enable(CRM_IOMUX_PERIPH_CLOCK, TRUE);
+        // gpio_pin_remap_config(UART5_GMUX_0001, TRUE);
+        
+        // HACK - Since the pins span multiple ports, we initialise TX manually
+        gpio_default_para_init(&gpio_init_struct);
+        gpio_init_struct.gpio_drive_strength = GPIO_DRIVE_STRENGTH_STRONGER;
+        gpio_init_struct.gpio_out_type  = GPIO_OUTPUT_PUSH_PULL;
+        gpio_init_struct.gpio_mode = GPIO_MODE_MUX;
+        gpio_init_struct.gpio_pins = GPIO_Pin_12;
+        gpio_init_struct.gpio_pull = GPIO_PULL_NONE;
+        gpio_init(GPIOC, &gpio_init_struct);
     }
+#endif
     else
     {
         return;
     }
 
-	gpio_init_struct.gpio_drive_strength = GPIO_DRIVE_STRENGTH_STRONGER;
+    gpio_default_para_init(&gpio_init_struct);
+    gpio_init_struct.gpio_drive_strength = GPIO_DRIVE_STRENGTH_STRONGER;
 	gpio_init_struct.gpio_out_type  = GPIO_OUTPUT_PUSH_PULL;
-	gpio_init_struct.gpio_mode = GPIO_MODE_MUX;
+    gpio_init_struct.gpio_mode = GPIO_MODE_MUX;
 	gpio_init_struct.gpio_pins = Tx_Pin;
-	gpio_init_struct.gpio_pull = GPIO_PULL_NONE;
-	gpio_init(GPIOx, &gpio_init_struct);
-	
+    gpio_init_struct.gpio_pull = GPIO_PULL_NONE;
+    gpio_init(GPIOx, &gpio_init_struct);
+
 	gpio_init_struct.gpio_drive_strength = GPIO_DRIVE_STRENGTH_STRONGER;
 	gpio_init_struct.gpio_out_type  = GPIO_OUTPUT_PUSH_PULL;
 	gpio_init_struct.gpio_mode = GPIO_MODE_INPUT;
@@ -248,7 +225,7 @@ void HardwareSerial::begin(
   */
 void HardwareSerial::end(void)
 {
-	usart_interrupt_enable(_USARTx, USART_RDBF_INT, FALSE);
+    usart_interrupt_enable(_USARTx, USART_RDBF_INT, FALSE);
     usart_enable(_USARTx, FALSE);
 }
 
@@ -358,6 +335,7 @@ extern "C" SERIAL_3_IRQ_HANDLER_DEF()
 }
 #endif
 
+#if defined (AT32F415Rx)
 #if SERIAL_4_ENABLE
 HardwareSerial Serial4(SERIAL_4_UART);
 
@@ -375,30 +353,4 @@ extern "C" SERIAL_5_IRQ_HANDLER_DEF()
     Serial5.IRQHandler();
 }
 #endif
-
-#if SERIAL_6_ENABLE
-HardwareSerial Serial6(SERIAL_6_USART);
-
-extern "C" SERIAL_6_IRQ_HANDLER_DEF()
-{
-    Serial6.IRQHandler();
-}
-#endif
-
-#if SERIAL_7_ENABLE
-HardwareSerial Serial7(SERIAL_7_UART);
-
-extern "C" SERIAL_7_IRQ_HANDLER_DEF()
-{
-    Serial7.IRQHandler();
-}
-#endif
-
-#if SERIAL_8_ENABLE
-HardwareSerial Serial8(SERIAL_8_UART);
-
-extern "C" SERIAL_8_IRQ_HANDLER_DEF()
-{
-    Serial8.IRQHandler();
-}
 #endif

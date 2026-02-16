@@ -26,6 +26,7 @@
 /*=========================
    MCU configuration
  *=========================*/
+
 /* System tick */
 #define SYSTICK_TICK_FREQ                   1000 // Hz
 #define SYSTICK_PRIORITY                    0
@@ -66,29 +67,11 @@
 #  define SERIAL_5_IRQ_HANDLER_DEF()        void UART5_IRQHandler(void)
 #endif
 
-#define SERIAL_6_ENABLE                     1
-#if SERIAL_6_ENABLE
-#  define SERIAL_6_USART                    USART6
-#  define SERIAL_6_IRQ_HANDLER_DEF()        void USART6_IRQHandler(void)
-#endif
-
-#define SERIAL_7_ENABLE                     1
-#if SERIAL_7_ENABLE
-#  define SERIAL_7_UART                    UART7
-#  define SERIAL_7_IRQ_HANDLER_DEF()        void UART7_IRQHandler(void)
-#endif
-
-#define SERIAL_8_ENABLE                     1
-#if SERIAL_8_ENABLE
-#  define SERIAL_8_UART                    UART8
-#  define SERIAL_8_IRQ_HANDLER_DEF()        void UART8_IRQHandler(void)
-#endif
-
 /* Wire (Software I2C) */
 #define WIRE_USE_FULL_SPEED_I2C             0
 #define WIRE_SDA_PIN                        PB7
 #define WIRE_SCL_PIN                        PB6
-#define WIRE_DELAY                          0
+#define WIRE_DELAY                          1
 #define WIRE_BEGIN_TIMEOUT                  100 // ms
 #define WIRE_BUFF_SIZE                      32
 
@@ -104,11 +87,6 @@
 #define SPI_CLASS_2_ENABLE                  1
 #if SPI_CLASS_2_ENABLE
 #  define SPI_CLASS_2_SPI                   SPI2
-#endif
-
-#define SPI_CLASS_3_ENABLE                  1
-#if SPI_CLASS_3_ENABLE
-#  define SPI_CLASS_3_SPI                   SPI3
 #endif
 
 /* WString */
@@ -138,5 +116,8 @@
 /* PWM */
 #define PWM_RESOLUTION_DEFAULT              1000
 #define PWM_FREQUENCY_DEFAULT               10000
+
+/* RTC */
+#define ERTC_CLOCK_SOURCE                   ERTC_CLOCK_SOURCE_LEXT
 
 #endif

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright (c) 2017 - 2022 _VIFEXTech
+ * Copyright (c) 2019-2021 _VIFEXTech
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,21 @@
  */
 #include "wdg.h"
 
-uint32_t WDG_Init(uint32_t timeout)
+uint32_t WDG_SetTimeout(uint32_t timeout)
 {
-    uint32_t reload_value;
+    uint32_t reload_value = 0;
     uint32_t real_timeout = 0;
+    wdt_division_type division = WDT_CLK_DIV_256;
 
-    uint16_t division;
-
-    static const uint8_t div_map[] =
+    static const wdt_division_type div_map[] =
     {
-	  WDT_CLK_DIV_4, /*!< wdt clock divider value is 4 */
-	  WDT_CLK_DIV_8, /*!< wdt clock divider value is 8 */
-	  WDT_CLK_DIV_16, /*!< wdt clock divider value is 16 */
-	  WDT_CLK_DIV_32, /*!< wdt clock divider value is 32 */
-	  WDT_CLK_DIV_64, /*!< wdt clock divider value is 64 */
-	  WDT_CLK_DIV_128, /*!< wdt clock divider value is 128 */
-	  WDT_CLK_DIV_256  /*!< wdt clock divider value is 256 */
+        WDT_CLK_DIV_4,
+        WDT_CLK_DIV_8,
+        WDT_CLK_DIV_16,
+        WDT_CLK_DIV_32,
+        WDT_CLK_DIV_64,
+        WDT_CLK_DIV_128,
+        WDT_CLK_DIV_256
     };
 
     /* set reload value
@@ -47,7 +46,7 @@ uint32_t WDG_Init(uint32_t timeout)
      */
     const uint32_t lick_freq = 40000;
 
-    for(int i = 0; i < sizeof(div_map) / sizeof(uint8_t); i++)
+    for(int i = 0; i < sizeof(div_map) / sizeof(wdt_division_type); i++)
     {
         int div = 4 << i;
         reload_value = (uint64_t)timeout * lick_freq / div / 1000;
@@ -65,29 +64,28 @@ uint32_t WDG_Init(uint32_t timeout)
         return 0;
     }
 
-	if(crm_flag_get(CRM_WDT_RESET_FLAG) != RESET)
-	{
-		/* reset from wdt */
-		crm_flag_clear(CRM_WDT_RESET_FLAG);
+    if(crm_flag_get(CRM_WDT_RESET_FLAG) != RESET)
+    {
+        /* reset from wdt */
+        crm_flag_clear(CRM_WDT_RESET_FLAG);
     }
 
-	/* disable register write protection */
-	wdt_register_write_enable(TRUE);
+    /* disable register write protection */
+    wdt_register_write_enable(TRUE);
 
-	/* set the wdt divider value */
-	wdt_divider_set(division);
+    /* set the wdt divider value */
+    wdt_divider_set(division);
 
-
-    /* Set counter reload value */
-    wdt_reload_value_set(3000 - 1);
-
-    /* Reload IWDG counter */
-    wdt_counter_reload();
-
-    /* Enable IWDG (the LSI oscillator will be enabled by hardware) */
-    wdt_enable();
+    /* set reload value */
+    wdt_reload_value_set(reload_value - 1);
 
     return real_timeout;
+}
+
+void WDG_SetEnable(void)
+{
+    /* enable wdt */
+    wdt_enable();
 }
 
 void WDG_ReloadCounter(void)

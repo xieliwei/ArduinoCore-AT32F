@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright (c) 2017 - 2022 _VIFEXTech
+ * Copyright (c) 2019 - 2021 _VIFEXTech
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@
 #define __RTC_H
 
 #include "mcu_type.h"
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,20 +32,20 @@ extern "C" {
 
 typedef struct
 {
+    uint16_t year;
+    uint8_t month;
+    uint8_t day;
+    uint8_t week;
     uint8_t hour;
     uint8_t min;
     uint8_t sec;
-    uint16_t year;
-    uint8_t  month;
-    uint8_t  day;
-    uint8_t  week;
 } RTC_Calendar_TypeDef;
 
 void RTC_Init(void);
+bool RTC_SetAlarm(uint16_t year, uint8_t mon, uint8_t day, uint8_t hour, uint8_t min, uint8_t sec);
+bool RTC_SetTime(uint16_t year, uint8_t mon, uint8_t day, uint8_t hour, uint8_t min, uint8_t sec);
 void RTC_GetCalendar(RTC_Calendar_TypeDef* calendar);
-uint8_t RTC_SetAlarm(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec);
 uint8_t RTC_GetWeek(uint16_t year, uint8_t month, uint8_t day);
-uint8_t RTC_SetTime(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec);
 
 #ifdef __cplusplus
 }

@@ -31,15 +31,12 @@ extern void loop(void);
 // Force init to be called *first*, i.e. before static object allocation.
 // Otherwise, statically allocated objects that need libmaple may fail.
  __attribute__(( constructor (101))) void premain() {
-    
 }
 
 int main(void) {
-	Core_Init();
+    Core_Init();
     setup();
-
-    while (1) {
+    for (;;)
         loop();
-    }
     return 0;
 }

@@ -75,7 +75,7 @@ static IRQn_Type EXTI_GetIRQn(uint8_t Pin)
   * @brief  外部中断初始化
   * @param  Pin: 引脚编号
   * @param  Function: 回调函数
-  * @param  Trigger_Mode: 触发方式
+  * @param  line_polarity: 触发方式
   * @param  PreemptionPriority: 抢占优先级
   * @param  SubPriority: 子优先级
   * @retval 无
@@ -88,7 +88,7 @@ void EXTIx_Init(
     uint8_t SubPriority
 )
 {
-	exint_init_type exint_init_struct;
+    exint_init_type exint_init_struct;
     uint8_t Pinx;
 
     if(!IS_PIN(Pin))
@@ -101,7 +101,7 @@ void EXTIx_Init(
 
     EXTI_Function[Pinx] = Function;
 
-	crm_periph_clock_enable(CRM_IOMUX_PERIPH_CLOCK, TRUE);
+    crm_periph_clock_enable(CRM_IOMUX_PERIPH_CLOCK, TRUE);
 
 	gpio_exint_line_config(GPIO_GetPortNum(Pin), (gpio_pins_source_type)Pinx);
     exint_default_para_init(&exint_init_struct);
@@ -112,14 +112,13 @@ void EXTIx_Init(
     exint_init(&exint_init_struct);
 
     nvic_irq_enable(EXTI_GetIRQn(Pin), PreemptionPriority, SubPriority);
-
 }
 
 /**
   * @brief  外部中断初始化 (Arduino)
   * @param  Pin: 引脚编号
   * @param  function: 回调函数
-  * @param  Trigger_Mode: 触发方式
+  * @param  line_polarity: 触发方式
   * @retval 无
   */
 void attachInterrupt(uint8_t Pin, EXTI_CallbackFunction_t Function, exint_polarity_config_type line_polarity)
@@ -146,13 +145,13 @@ void detachInterrupt(uint8_t Pin)
     nvic_irq_disable(EXTI_GetIRQn(Pin));
 }
 
-#define EXTIx_IRQHANDLER(n) \
-do{\
-    if(exint_flag_get(EXINT_LINE_##n) != RESET)\
-    {\
-        if(EXTI_Function[n]) EXTI_Function[n]();\
-        exint_flag_clear(EXINT_LINE_##n);\
-    }\
+#define EXTIx_IRQHANDLER(n)                         \
+do{                                                 \
+    if(exint_flag_get(EXINT_LINE_##n) != RESET)     \
+    {                                               \
+        if(EXTI_Function[n]) EXTI_Function[n]();    \
+        exint_flag_clear(EXINT_LINE_##n);           \
+    }                                               \
 }while(0)
 
 /**

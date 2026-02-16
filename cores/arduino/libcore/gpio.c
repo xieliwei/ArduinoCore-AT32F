@@ -24,50 +24,50 @@
 
 const PinInfo_TypeDef PIN_MAP[PIN_MAX] =
 {
-    /*GPIO_Type* GPIOx;  //对应GPIOx地址
-    TIM_Type* TIMx;      //对应TIMx地址
-    ADC_Type* ADCx;      //对应ADCx地址
-
-    uint16_t GPIO_Pin_x;    //对应GPIO_Pin位
-    uint8_t TimerChannel;   //对应定时器通道
-    uint8_t ADC_CHANNEL;*/  //对应ADC通道
+    /** GPIO_Type* GPIOx;        GPIOx地址
+      * TIM_Type* TIMx;          TIMx地址
+      * ADC_Type* ADCx;          ADCx地址
+      * uint16_t GPIO_Pin_x;     GPIO_Pin位
+      * uint8_t TimerChannel;    定时器通道
+      * uint8_t ADC_CHANNEL;     ADC通道
+      */
     {GPIOA, TIM2, ADC1,  GPIO_Pin_0, 1, ADC_CHANNEL_0}, /* PA0 */
     {GPIOA, TIM2, ADC1,  GPIO_Pin_1, 2, ADC_CHANNEL_1}, /* PA1 */
     {GPIOA, TIM2, ADC1,  GPIO_Pin_2, 3, ADC_CHANNEL_2}, /* PA2 */
     {GPIOA, TIM2, ADC1,  GPIO_Pin_3, 4, ADC_CHANNEL_3}, /* PA3 */
     {GPIOA, NULL, ADC1,  GPIO_Pin_4, 0, ADC_CHANNEL_4}, /* PA4 */
-    {GPIOA, NULL, ADC1,  GPIO_Pin_5, 0, ADC_CHANNEL_5}, /* PA5 */
-    {GPIOA, TIM3, ADC1,  GPIO_Pin_6, 1, ADC_CHANNEL_6}, /* PA6 */
-    {GPIOA, TIM3, ADC1,  GPIO_Pin_7, 2, ADC_CHANNEL_7}, /* PA7 */
-    {GPIOA, TIM1, NULL,  GPIO_Pin_8, 1, ADC_CHANNEL_X}, /* PA8 */
-    {GPIOA, TIM1, NULL,  GPIO_Pin_9, 2, ADC_CHANNEL_X}, /* PA9 */
+    {GPIOA, NULL, ADC1, GPIO_Pin_5, 0, ADC_CHANNEL_5},  /* PA5 */
+    {GPIOA, TIM3, ADC1, GPIO_Pin_6, 1, ADC_CHANNEL_6},  /* PA6 */
+    {GPIOA, TIM3, ADC1, GPIO_Pin_7, 2, ADC_CHANNEL_7},  /* PA7 */
+    {GPIOA, TIM1, NULL, GPIO_Pin_8, 1, ADC_CHANNEL_X},  /* PA8 */
+    {GPIOA, TIM1, NULL, GPIO_Pin_9, 2, ADC_CHANNEL_X},  /* PA9 */
     {GPIOA, TIM1, NULL, GPIO_Pin_10, 3, ADC_CHANNEL_X}, /* PA10 */
     {GPIOA, TIM1, NULL, GPIO_Pin_11, 4, ADC_CHANNEL_X}, /* PA11 */
     {GPIOA, NULL, NULL, GPIO_Pin_12, 0, ADC_CHANNEL_X}, /* PA12 */
     {GPIOA, NULL, NULL, GPIO_Pin_13, 0, ADC_CHANNEL_X}, /* PA13 */
     {GPIOA, NULL, NULL, GPIO_Pin_14, 0, ADC_CHANNEL_X}, /* PA14 */
-    {GPIOA, NULL, NULL, GPIO_Pin_15, 1, ADC_CHANNEL_X}, /* PA15 */
+    {GPIOA, TIM2, NULL, GPIO_Pin_15, 1, ADC_CHANNEL_X}, /* PA15 */
 
     {GPIOB, TIM3, ADC1,  GPIO_Pin_0, 3, ADC_CHANNEL_8}, /* PB0 */
     {GPIOB, TIM3, ADC1,  GPIO_Pin_1, 4, ADC_CHANNEL_9}, /* PB1 */
     {GPIOB, NULL, NULL,  GPIO_Pin_2, 0, ADC_CHANNEL_X}, /* PB2 */
-    {GPIOB, NULL, NULL,  GPIO_Pin_3, 2, ADC_CHANNEL_X}, /* PB3 */
+    {GPIOB, TIM2, NULL,  GPIO_Pin_3, 2, ADC_CHANNEL_X}, /* PB3 */
     {GPIOB, TIM3, NULL,  GPIO_Pin_4, 1, ADC_CHANNEL_X}, /* PB4 */
     {GPIOB, TIM3, NULL,  GPIO_Pin_5, 2, ADC_CHANNEL_X}, /* PB5 */
     {GPIOB, TIM4, NULL,  GPIO_Pin_6, 1, ADC_CHANNEL_X}, /* PB6 */
     {GPIOB, TIM4, NULL,  GPIO_Pin_7, 2, ADC_CHANNEL_X}, /* PB7 */
     {GPIOB, TIM4, NULL,  GPIO_Pin_8, 3, ADC_CHANNEL_X}, /* PB8 */
     {GPIOB, TIM4, NULL,  GPIO_Pin_9, 4, ADC_CHANNEL_X}, /* PB9 */
-    {GPIOB, NULL, NULL, GPIO_Pin_10, 3, ADC_CHANNEL_X}, /* PB10 */
-    {GPIOB, NULL, NULL, GPIO_Pin_11, 4, ADC_CHANNEL_X}, /* PB11 */
+    {GPIOB, TIM2, NULL, GPIO_Pin_10, 3, ADC_CHANNEL_X}, /* PB10 */
+    {GPIOB, TIM2, NULL, GPIO_Pin_11, 4, ADC_CHANNEL_X}, /* PB11 */
     {GPIOB, NULL, NULL, GPIO_Pin_12, 0, ADC_CHANNEL_X}, /* PB12 */
-    {GPIOB, NULL, NULL, GPIO_Pin_13, 0, ADC_CHANNEL_X}, /* PB13 */
+    {GPIOB, TIM1, NULL, GPIO_Pin_13, 1, ADC_CHANNEL_X}, /* PB13 */
 #ifdef TMR12
     {GPIOB, TIM12, NULL, GPIO_Pin_14, 1, ADC_CHANNEL_X},/* PB14 */
 #else
-    {GPIOB, NULL, NULL, GPIO_Pin_14, 0, ADC_Channel_X},/* PB14 */
+    {GPIOB, TIM1, NULL, GPIO_Pin_14, 2, ADC_CHANNEL_X},/* PB14 */
 #endif /*TMR12*/
-    {GPIOB, NULL, NULL, GPIO_Pin_15, 0, ADC_CHANNEL_X}, /* PB15 */
+    {GPIOB, TIM1, NULL, GPIO_Pin_15, 3, ADC_CHANNEL_X}, /* PB15 */
 
     {GPIOC, NULL, ADC1,  GPIO_Pin_0, 0, ADC_CHANNEL_10},/* PC0 */
     {GPIOC, NULL, ADC1,  GPIO_Pin_1, 0, ADC_CHANNEL_11},/* PC1 */
@@ -75,10 +75,10 @@ const PinInfo_TypeDef PIN_MAP[PIN_MAX] =
     {GPIOC, NULL, ADC1,  GPIO_Pin_3, 0, ADC_CHANNEL_13},/* PC3 */
     {GPIOC, NULL, ADC1,  GPIO_Pin_4, 0, ADC_CHANNEL_14},/* PC4 */
     {GPIOC, NULL, ADC1,  GPIO_Pin_5, 0, ADC_CHANNEL_15},/* PC5 */
-    {GPIOC, NULL, NULL,  GPIO_Pin_6, 1, ADC_CHANNEL_X}, /* PC6 */
-    {GPIOC, NULL, NULL,  GPIO_Pin_7, 2, ADC_CHANNEL_X}, /* PC7 */
-    {GPIOC, NULL, NULL,  GPIO_Pin_8, 3, ADC_CHANNEL_X}, /* PC8 */
-    {GPIOC, NULL, NULL,  GPIO_Pin_9, 4, ADC_CHANNEL_X}, /* PC9 */
+    {GPIOC, TIM1, NULL,  GPIO_Pin_6, 1, ADC_CHANNEL_X}, /* PC6 */
+    {GPIOC, TIM1, NULL,  GPIO_Pin_7, 2, ADC_CHANNEL_X}, /* PC7 */
+    {GPIOC, TIM1, NULL,  GPIO_Pin_8, 3, ADC_CHANNEL_X}, /* PC8 */
+    {GPIOC, TIM1, NULL,  GPIO_Pin_9, 4, ADC_CHANNEL_X}, /* PC9 */
     {GPIOC, NULL, NULL, GPIO_Pin_10, 0, ADC_CHANNEL_X}, /* PC10 */
     {GPIOC, NULL, NULL, GPIO_Pin_11, 0, ADC_CHANNEL_X}, /* PC11 */
     {GPIOC, NULL, NULL, GPIO_Pin_12, 0, ADC_CHANNEL_X}, /* PC12 */
@@ -129,8 +129,8 @@ const PinInfo_TypeDef PIN_MAP[PIN_MAX] =
 
 #ifdef ADC3
     {GPIOF, NULL, ADC3,  GPIO_Pin_3, 0, ADC_CHANNEL_9}, /* PF3 */
-    {GPIOF, NULL, ADC3,  GPIO_Pin_4, 0, ADC_CHANNEL_14},/* PF4 */
-    {GPIOF, NULL, ADC3,  GPIO_Pin_5, 0, ADC_CHANNEL_15},/* PF5 */
+    {GPIOF, TIM5, ADC3,  GPIO_Pin_4, 1, ADC_CHANNEL_14},/* PF4 */
+    {GPIOF, TIM5, ADC3,  GPIO_Pin_5, 2, ADC_CHANNEL_15},/* PF5 */
     {GPIOF, TIM10, ADC3,  GPIO_Pin_6, 1, ADC_CHANNEL_4}, /* PF6 */
     {GPIOF, TIM11, ADC3,  GPIO_Pin_7, 1, ADC_CHANNEL_5}, /* PF7 */
     {GPIOF, TIM13, ADC3,  GPIO_Pin_8, 1, ADC_CHANNEL_6}, /* PF8 */
@@ -138,10 +138,10 @@ const PinInfo_TypeDef PIN_MAP[PIN_MAX] =
     {GPIOF, NULL, ADC3, GPIO_Pin_10, 0, ADC_CHANNEL_8}, /* PF10 */
 #else
     {GPIOF, NULL, NULL,  GPIO_Pin_3, 0, ADC_CHANNEL_X}, /* PF3 */
-    {GPIOF, NULL, NULL,  GPIO_Pin_4, 0, ADC_CHANNEL_X},/* PF4 */
-    {GPIOF, NULL, NULL,  GPIO_Pin_5, 0, ADC_CHANNEL_X},/* PF5 */
-    {GPIOF, TIM10, NULL,  GPIO_Pin_6, 1, ADC_CHANNEL_X}, /* PF6 */
-    {GPIOF, TIM11, NULL,  GPIO_Pin_7, 1, ADC_CHANNEL_X}, /* PF7 */
+    {GPIOF, TIM5, NULL,  GPIO_Pin_4, 1, ADC_CHANNEL_X},/* PF4 */
+    {GPIOF, TIM5, NULL,  GPIO_Pin_5, 2, ADC_CHANNEL_X},/* PF5 */
+    {GPIOF, NULL, NULL,  GPIO_Pin_6, 0, ADC_CHANNEL_X}, /* PF6 */
+    {GPIOF, NULL, NULL,  GPIO_Pin_7, 0, ADC_CHANNEL_X}, /* PF7 */
     {GPIOF, NULL, NULL,  GPIO_Pin_8, 0, ADC_CHANNEL_X}, /* PF8 */
     {GPIOF, NULL, NULL,  GPIO_Pin_9, 0, ADC_CHANNEL_X}, /* PF9 */
     {GPIOF, NULL, NULL, GPIO_Pin_10, 0, ADC_CHANNEL_X}, /* PF10 */
@@ -178,7 +178,7 @@ const PinInfo_TypeDef PIN_MAP[PIN_MAX] =
   * @param  GPIOx: GPIO地址
   * @param  GPIO_Pin_x: GPIO对应位
   * @param  GPIO_Mode_x: GPIO模式
-  * @param  GPIO_Speed_x: GPIO速度
+  * @param  GPIO_Drive_x: GPIO速度
   * @retval 无
   */
 void GPIOx_Init(
@@ -205,11 +205,11 @@ void GPIOx_Init(
     else if(GPIOx == GPIOG)CRM_GPIOx_PERIPH_CLOCK = CRM_GPIOG_PERIPH_CLOCK;
 #endif /*GPIOG*/
     else return;
-	
-	gpio_default_para_init(&gpio_init_struct);
+
+    gpio_default_para_init(&gpio_init_struct);
     gpio_init_struct.gpio_pins = GPIO_Pin_x;
     gpio_init_struct.gpio_drive_strength = GPIO_Drive_x;
-    
+
     if(Mode == INPUT)
     {
         gpio_init_struct.gpio_mode = GPIO_MODE_INPUT;
@@ -285,7 +285,7 @@ uint8_t GPIO_GetPortNum(uint8_t Pin)
     uint8_t index;
     gpio_type* GPIOx = PIN_MAP[Pin].GPIOx;
 
-    gpio_type* GPIO_Map[] =
+    static const gpio_type* GPIO_Map[] =
     {
         GPIOA,
         GPIOB,
@@ -319,7 +319,7 @@ uint8_t GPIO_GetPortNum(uint8_t Pin)
   * @param  GPIO_Pin_x: GPIO对应位
   * @retval 无
   */
-uint8_t GPIO_GetPinSource(uint16_t GPIO_Pin_x)
+gpio_pins_source_type GPIO_GetPinSource(uint16_t GPIO_Pin_x)
 {
     uint8_t PinSource = 0;
     while(GPIO_Pin_x > 1)
@@ -327,7 +327,7 @@ uint8_t GPIO_GetPinSource(uint16_t GPIO_Pin_x)
         GPIO_Pin_x >>= 1;
         PinSource++;
     }
-    return PinSource;
+    return (gpio_pins_source_type)PinSource;
 }
 
 /**

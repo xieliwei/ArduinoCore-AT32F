@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright (c) 2017 - 2022 _VIFEXTech
+ * Copyright (c) 2019-2021 _VIFEXTech
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,16 @@
 #ifndef __MCU_TYPE_H
 #define __MCU_TYPE_H
 
-#include "at32f403a_407.h"
-#include "at32f403a_407_conf.h"
+#include "at32f415.h"
+#include "at32f415_conf.h"
 #include "config/mcu_config.h"
 
 #define __AT32__
 #define __AT32F4__
-// #define F_CPU                       system_core_clock
-// #define F_CPU  80000000L
+#define __AT32F415__
+#define __STM32__
+#define __STM32F4__
+#define F_CPU                       system_core_clock
 #define CYCLES_PER_MICROSECOND      (F_CPU / 1000000U)
 
 typedef gpio_type                   GPIO_TypeDef;
@@ -60,16 +62,8 @@ typedef tmr_type                    TIM_TypeDef;
 #define TIM3                        TMR3
 #define TIM4                        TMR4
 #define TIM5                        TMR5
-#define TIM6                        TMR6
-#define TIM7                        TMR7
-#define TIM8                        TMR8
 #define TIM9                        TMR9
 #define TIM10                       TMR10
 #define TIM11                       TMR11
-#define TIM12                       TMR12
-#define TIM13                       TMR13
-#define TIM14                       TMR14
-#define TIM15                       TMR15
-
 
 #endif

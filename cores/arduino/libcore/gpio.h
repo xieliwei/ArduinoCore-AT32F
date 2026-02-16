@@ -39,10 +39,10 @@ extern "C" {
 #define IS_ADC_PIN(Pin) (IS_PIN(Pin) && PIN_MAP[Pin].ADCx != NULL && PIN_MAP[Pin].ADC_Channel  != ADC_CHANNEL_X)
 #define IS_PWM_PIN(Pin) (IS_PIN(Pin) && PIN_MAP[Pin].TIMx != NULL && PIN_MAP[Pin].TimerChannel != 0)
 
-#define GPIO_HIGH(GPIOX,GPIO_PIN_X)    ((GPIOX)->scr    = (GPIO_PIN_X))
+#define GPIO_HIGH(GPIOX,GPIO_PIN_X)    ((GPIOX)->scr     = (GPIO_PIN_X))
 #define GPIO_LOW(GPIOX,GPIO_PIN_X)     ((GPIOX)->clr     = (GPIO_PIN_X))
-#define GPIO_READ(GPIOX,GPIO_PIN_X)   (((GPIOX)->idt   & (GPIO_PIN_X))!=0)
-#define GPIO_TOGGLE(GPIOX,GPIO_PIN_X)  ((GPIOX)->odt  ^= (GPIO_PIN_X))
+#define GPIO_READ(GPIOX,GPIO_PIN_X)   (((GPIOX)->idt     & (GPIO_PIN_X))!=0)
+#define GPIO_TOGGLE(GPIOX,GPIO_PIN_X)  ((GPIOX)->odt    ^= (GPIO_PIN_X))
 
 #define portInputRegister(Port)     (&(Port->idt))
 #define portOutputRegister(Port)    (&(Port->odt))
@@ -112,7 +112,7 @@ void GPIOx_Init(
 void GPIO_JTAG_Disable(void);
 uint8_t GPIO_GetPortNum(uint8_t Pin);
 uint8_t GPIO_GetPinNum(uint8_t Pin);
-uint8_t GPIO_GetPinSource(uint16_t GPIO_Pin_x);
+gpio_pins_source_type GPIO_GetPinSource(uint16_t GPIO_Pin_x);
 
 #ifdef __cplusplus
 }// extern "C"

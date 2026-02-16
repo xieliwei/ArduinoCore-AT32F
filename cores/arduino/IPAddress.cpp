@@ -74,9 +74,17 @@ size_t IPAddress::printTo(Print& p) const
 
 String IPAddress::toString() const
 {
-    char szRet[16];
-    sprintf(szRet,"%u.%u.%u.%u", _address.bytes[0], _address.bytes[1], _address.bytes[2], _address.bytes[3]);
-    return String(szRet);
+    String s;
+    s.reserve(15);
+
+    for (int i = 0; i < 4; ++i)
+    {
+        s += _address.bytes[i];
+        if (i < 3)
+            s += '.';
+    }
+
+    return s;
 }
 
 bool IPAddress::fromString(const char *address)

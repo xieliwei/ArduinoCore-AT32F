@@ -21,11 +21,12 @@
  * SOFTWARE.
  */
 #include "timer.h"
+#include "gpio.h"
 
 typedef enum
 {
-    TIMER1, TIMER2, TIMER3, TIMER4, TIMER5, TIMER6, TIMER7, TIMER8,
-    TIMER9, TIMER10, TIMER11, TIMER12, TIMER13, TIMER14, TIMER15,
+    TIMER1, TIMER2, TIMER3, TIMER4, TIMER5,
+    TIMER9, TIMER10, TIMER11,
     TIMER_MAX
 } TIMER_Type;
 
@@ -34,12 +35,12 @@ static Timer_CallbackFunction_t Timer_CallbackFunction[TIMER_MAX] = { 0 };
 /**
   * @brief  启动或关闭指定定时器的时钟
   * @param  TIMx:定时器地址
-  * @param  NewState: ENABLE启动，DISABLE关闭
+  * @param  Enable: true启动，false关闭
   * @retval 无
   */
 void Timer_ClockCmd(tmr_type* TIMx, bool Enable)
 {
-    int index;
+    unsigned int index;
     typedef struct
     {
         tmr_type* tmr;
@@ -55,15 +56,9 @@ void Timer_ClockCmd(tmr_type* TIMx, bool Enable)
         CLOCK_MAP_DEF(3),
         CLOCK_MAP_DEF(4),
         CLOCK_MAP_DEF(5),
-        CLOCK_MAP_DEF(6),
-        CLOCK_MAP_DEF(7),
-        CLOCK_MAP_DEF(8),
         CLOCK_MAP_DEF(9),
         CLOCK_MAP_DEF(10),
         CLOCK_MAP_DEF(11),
-        CLOCK_MAP_DEF(12),
-        CLOCK_MAP_DEF(13),
-        CLOCK_MAP_DEF(14)
     };
 
     for(index = 0; index < sizeof(clock_map) / sizeof(crm_tmr_clock_map_t); index++)
@@ -71,6 +66,7 @@ void Timer_ClockCmd(tmr_type* TIMx, bool Enable)
         if(TIMx == clock_map[index].tmr)
         {
             crm_periph_clock_enable(clock_map[index].crm_periph_clock, Enable ? TRUE : FALSE);
+            break;
         }
     }
 }
@@ -78,7 +74,7 @@ void Timer_ClockCmd(tmr_type* TIMx, bool Enable)
 static float Qsqrt(float number)
 {
     union {
-      long i;
+    long i;
       float y;
     } cast;
 
@@ -264,11 +260,12 @@ bool Timer_SetInterruptFreqUpdate(tmr_type* TIMx, uint32_t Freq)
     uint16_t period, prescaler;
     uint32_t clock = Timer_GetClockMax(TIMx);
     int32_t error;
+    bool success;
 
     if(Freq == 0)
         return false;
 
-    bool success = Timer_FreqFactorization(
+    success = Timer_FreqFactorization(
                        Freq,
                        clock,
                        &period,
@@ -298,7 +295,17 @@ uint32_t Timer_GetClockMax(tmr_type* TIMx)
         crm_clocks_freq_get(&crm_clocks_freq_struct);
     }
 
-    return crm_clocks_freq_struct.apb1_freq * 2;
+    if(TIMx == TIM2 || TIMx == TIM3 || TIMx == TIM4 || TIMx == TIM5)
+    {
+        return crm_clocks_freq_struct.apb1_freq;
+    }
+
+    if(TIMx == TIM1 || TIMx == TIM9 || TIMx == TIM10 || TIMx == TIM11)
+    {
+        return crm_clocks_freq_struct.apb2_freq;
+    }
+
+    return 0;
 }
 
 /**
@@ -319,7 +326,7 @@ uint32_t Timer_GetClockOut(tmr_type* TIMx)
   * @param  Time: 中断时间(微秒)
   * @retval 无
   */
-void Timer_SetInterruptTimeUpdate(TIM_TypeDef* TIMx, uint32_t Time)
+void Timer_SetInterruptTimeUpdate(tmr_type* TIMx, uint32_t Time)
 {
     uint16_t period, prescaler;
     uint32_t clock = Timer_GetClockMax(TIMx);
@@ -375,15 +382,9 @@ while(0)
     TMRx_IRQ_DEF(3, TMR3_GLOBAL_IRQn);
     TMRx_IRQ_DEF(4, TMR4_GLOBAL_IRQn);
     TMRx_IRQ_DEF(5, TMR5_GLOBAL_IRQn);
-    TMRx_IRQ_DEF(6, TMR6_GLOBAL_IRQn);
-    TMRx_IRQ_DEF(7, TMR7_GLOBAL_IRQn);
-    TMRx_IRQ_DEF(8, TMR8_OVF_TMR13_IRQn);
     TMRx_IRQ_DEF(9, TMR1_BRK_TMR9_IRQn);
     TMRx_IRQ_DEF(10, TMR1_OVF_TMR10_IRQn);
     TMRx_IRQ_DEF(11, TMR1_TRG_HALL_TMR11_IRQn);
-    TMRx_IRQ_DEF(12, TMR8_BRK_TMR12_IRQn);
-    TMRx_IRQ_DEF(13, TMR8_OVF_TMR13_IRQn);
-    TMRx_IRQ_DEF(14, TMR8_TRG_HALL_TMR14_IRQn);
 
 match:
 
@@ -415,7 +416,7 @@ match:
   * @param  Compare:输出比较值
   * @retval 无
   */
-void Timer_SetCompare(TIM_TypeDef* TIMx, uint8_t TimerChannel, uint32_t Compare)
+void Timer_SetCompare(tmr_type* TIMx, uint8_t TimerChannel, uint32_t Compare)
 {
     switch(TimerChannel)
     {
@@ -442,7 +443,7 @@ void Timer_SetCompare(TIM_TypeDef* TIMx, uint8_t TimerChannel, uint32_t Compare)
   * @param  TimerChannel: 定时器通道
   * @retval 捕获值
   */
-uint16_t Timer_GetCompare(TIM_TypeDef* TIMx, uint8_t TimerChannel)
+uint16_t Timer_GetCompare(tmr_type* TIMx, uint8_t TimerChannel)
 {
     uint16_t retval = 0;
     switch(TimerChannel)
@@ -535,16 +536,16 @@ void Timer_Resume(tmr_type* TIMx)
     tmr_interrupt_enable(TIMx, TMR_C4_INT, TRUE);
 }
 
-#define TMRx_IRQHANDLER(n) \
-do{\
-    if (tmr_flag_get(TMR##n, TMR_OVF_FLAG) != RESET)\
-    {\
-        if(Timer_CallbackFunction[TIMER##n])\
-        {\
-            Timer_CallbackFunction[TIMER##n]();\
-        }\
-        tmr_flag_clear(TMR##n, TMR_OVF_FLAG);\
-    }\
+#define TMRx_IRQHANDLER(n)                              \
+do{                                                     \
+    if (tmr_flag_get(TMR##n, TMR_OVF_FLAG) != RESET)    \
+    {                                                   \
+        if(Timer_CallbackFunction[TIMER##n])            \
+        {                                               \
+            Timer_CallbackFunction[TIMER##n]();         \
+        }                                               \
+        tmr_flag_clear(TMR##n, TMR_OVF_FLAG);           \
+    }                                                   \
 }while(0)
 
 /**
@@ -599,50 +600,25 @@ void TMR5_GLOBAL_IRQHandler(void)
 }
 
 /**
-  * @brief  定时中断入口，定时器6
+  * @brief  定时中断入口，定时器9
   * @param  无
   * @retval 无
   */
-void TMR6_GLOBAL_IRQHandler(void)
+void TMR1_BRK_TMR9_IRQHandler(void)
 {
-#ifdef TMR6
-    TMRx_IRQHANDLER(6);
+#ifdef TMR9
+    TMRx_IRQHANDLER(9);
 #endif
 }
 
 /**
-  * @brief  定时中断入口，定时器7
+  * @brief  定时中断入口，定时器11
   * @param  无
   * @retval 无
   */
-void TMR7_GLOBAL_IRQHandler(void)
+void TMR1_TRG_HALL_TMR11_IRQHandler(void)
 {
-#ifdef TMR7
-    TMRx_IRQHANDLER(7);
-#endif
-}
-
-/**
-  * @brief  定时中断入口，定时器8、13
-  * @param  无
-  * @retval 无
-  */
-void TMR8_OVF_TMR13_IRQHandler(void)
-{
-    TMRx_IRQHANDLER(8);
-#ifdef TMR13
-    TMRx_IRQHANDLER(13);
-#endif
-}
-
-/**
-  * @brief  定时中断入口，定时器15
-  * @param  无
-  * @retval 无
-  */
-void TMR15_OVF_IRQHandler(void)
-{
-#ifdef TMR15
-    TMRx_IRQHANDLER(15);
+#ifdef TMR11
+    TMRx_IRQHANDLER(11);
 #endif
 }

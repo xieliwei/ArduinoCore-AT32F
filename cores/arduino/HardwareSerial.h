@@ -29,15 +29,6 @@
 
 typedef enum
 {
-    SERIAL_7E1,
-    SERIAL_7E2,
-    SERIAL_7O1,
-    SERIAL_7O2,
-    SERIAL_7E0_5,
-    SERIAL_7E1_5,
-    SERIAL_7O0_5,
-    SERIAL_7O1_5,
-
     SERIAL_8N1,
     SERIAL_8N2,
     SERIAL_8E1,
@@ -53,8 +44,16 @@ typedef enum
 
     SERIAL_9N1,
     SERIAL_9N2,
+    SERIAL_9E1,
+    SERIAL_9E2,
+    SERIAL_9O1,
+    SERIAL_9O2,
     SERIAL_9N0_5,
     SERIAL_9N1_5,
+    SERIAL_9E0_5,
+    SERIAL_9E1_5,
+    SERIAL_9O0_5,
+    SERIAL_9O1_5,
 } SERIAL_Config_t;
 
 class HardwareSerial : public Stream
@@ -133,18 +132,6 @@ extern HardwareSerial Serial4;
 
 #if SERIAL_5_ENABLE
 extern HardwareSerial Serial5;
-#endif
-
-#if SERIAL_6_ENABLE
-extern HardwareSerial Serial6;
-#endif
-
-#if SERIAL_7_ENABLE
-extern HardwareSerial Serial7;
-#endif
-
-#if SERIAL_8_ENABLE
-extern HardwareSerial Serial8;
 #endif
 
 #endif

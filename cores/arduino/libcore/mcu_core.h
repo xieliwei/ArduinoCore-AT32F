@@ -23,10 +23,7 @@
 #ifndef __MCU_CORE_H
 #define __MCU_CORE_H
 
-#include "at32f403a_407_clock.h"
-
-#define sei() __set_PRIMASK(0)
-#define cli() __set_PRIMASK(1)
+#include "at32f415_clock.h"
 
 #include "adc.h"
 #include "delay.h"
@@ -35,6 +32,9 @@
 #include "pwm.h"
 #include "timer.h"
 #include "wdg.h"
+
+#define sei() __set_PRIMASK(0)
+#define cli() __set_PRIMASK(1)
 
 #ifdef __cplusplus
 extern "C" {

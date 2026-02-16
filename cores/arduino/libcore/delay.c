@@ -27,7 +27,7 @@
 #endif
 
 #define SYSTICK_TICK_INTERVAL   (1000 / SYSTICK_TICK_FREQ)
-#define SYSTICK_LOAD_VALUE      (system_core_clock / SYSTICK_TICK_FREQ)
+#define SYSTICK_LOAD_VALUE      (F_CPU / SYSTICK_TICK_FREQ)
 #define SYSTICK_MILLIS          (SystemTickCount * SYSTICK_TICK_INTERVAL)
 
 static volatile uint32_t SystemTickCount = 0;
@@ -42,6 +42,12 @@ void Delay_Init(void)
     system_core_clock_update();
     SysTick_Config(SYSTICK_LOAD_VALUE);
     NVIC_SetPriority(SysTick_IRQn, SYSTICK_PRIORITY);
+}
+
+void Delay_Deinit(void)
+{
+    SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
+    NVIC_DisableIRQ(SysTick_IRQn);
 }
 
 /**

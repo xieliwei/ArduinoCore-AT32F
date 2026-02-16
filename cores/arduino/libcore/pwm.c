@@ -43,12 +43,12 @@ static void TIMx_OCxInit(tmr_type* TIMx, uint32_t arr, uint16_t psc, uint8_t Tim
 
     tmr_output_default_para_init(&tmr_output_struct);
     tmr_output_struct.oc_mode = TMR_OUTPUT_CONTROL_PWM_MODE_B;
+    tmr_output_struct.oc_output_state = TRUE;
     tmr_output_struct.oc_polarity = TMR_OUTPUT_ACTIVE_LOW;
     tmr_output_struct.oc_idle_state = TRUE;
+    tmr_output_struct.occ_output_state = TRUE;
     tmr_output_struct.occ_polarity = TMR_OUTPUT_ACTIVE_HIGH;
     tmr_output_struct.occ_idle_state = FALSE;
-    tmr_output_struct.oc_output_state = TRUE;
-    tmr_output_struct.occ_output_state = TRUE;
 
     switch(TimerChannel)
     {
@@ -82,6 +82,7 @@ static void TIMx_OCxInit(tmr_type* TIMx, uint32_t arr, uint16_t psc, uint8_t Tim
 uint8_t PWM_Init(uint8_t Pin, uint32_t Resolution, uint32_t Frequency)
 {
     uint32_t arr, psc;
+    tmr_type* TIMx;
 
     if(!IS_PWM_PIN(Pin))
     {
@@ -93,13 +94,18 @@ uint8_t PWM_Init(uint8_t Pin, uint32_t Resolution, uint32_t Frequency)
         return 0;
     }
 
+    TIMx = PIN_MAP[Pin].TIMx;
+
     pinMode(Pin, OUTPUT_AF_PP);
 
-    arr = Resolution;
-    psc = Timer_GetClockMax(PIN_MAP[Pin].TIMx) / Resolution / Frequency;
+    // gpio_pin_remap_config(PIN_MAP[Pin].GPIOx, GPIO_GetPinSource(PIN_MAP[Pin].GPIO_Pin_x), Timer_GetGPIO_MUX(Pin));
 
-    Timer_SetEnable(PIN_MAP[Pin].TIMx, false);
-    TIMx_OCxInit(PIN_MAP[Pin].TIMx, arr - 1, psc - 1, PIN_MAP[Pin].TimerChannel);
+    arr = Resolution;
+    psc = Timer_GetClockMax(TIMx) / Resolution / Frequency;
+
+    Timer_SetEnable(TIMx, false);
+    TIMx_OCxInit(TIMx, arr - 1, psc - 1, PIN_MAP[Pin].TimerChannel);
+
     return PIN_MAP[Pin].TimerChannel;
 }
 

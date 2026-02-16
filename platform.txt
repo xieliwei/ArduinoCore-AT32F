@@ -1,55 +1,79 @@
-##==============================================##
-name=WeActStudio AT32F403A Boards
-version=0.0.9
-##==============================================##
+name=AT32F
+version=0.0.1
 
-####AT32 compile variables
-
-## compiler variables
 compiler.path={runtime.tools.xpack-arm-none-eabi-gcc.path}/bin/
+compiler.prefix=arm-none-eabi-
 
-##All the command
-compiler.asm.cmd=arm-none-eabi-gcc
-compiler.c.cmd=arm-none-eabi-gcc
-compiler.cpp.cmd=arm-none-eabi-g++
-compiler.ar.cmd=arm-none-eabi-ar
-compiler.elf.cmd=arm-none-eabi-g++
-compiler.hex.cmd=arm-none-eabi-objcopy
-compiler.bin.cmd=arm-none-eabi-objcopy
-compiler.size.cmd=arm-none-eabi-size
+# Optimization flags
+compiler.optimization_flags=-Os
+compiler.optimization_flags.release=-Os
+compiler.optimization_flags.debug=-Og -g3
 
-##Set the compiler flags
+# Arduino Compile Warning Levels
+compiler.warning_flags=-w
+compiler.warning_flags.none=-w
+compiler.warning_flags.default=
+compiler.warning_flags.more=-Wall
+compiler.warning_flags.all=-Wall -Wextra
+
+# Additional flags specific to Arduino
+compiler.common_werror_flags=-Werror=return-type
+
+# Compile Flags
+compiler.FrameLib.includes="-I{build.system.path}/Drivers/CMSIS/Include" "-I{build.system.path}/AT32F415" "-I{build.system.path}/Drivers/Firmware/inc" "-I{build.system.path}/libcore" "-I{build.system.path}/libcore/config"
+
+compiler.cpreprocessor.flags="-I{build.source.path}"
+compiler.c.flags=-mthumb -MMD -fno-exceptions {compiler.warning_flags} {compiler.optimization_flags} {compiler.common_werror_flags}
+compiler.cpp.flags=-mthumb -MMD -fno-exceptions -fno-rtti {compiler.warning_flags} {compiler.optimization_flags} {compiler.common_werror_flags}
+compiler.S.flags=-mthumb {compiler.warning_flags} {compiler.optimization_flags}
+compiler.c.elf.flags=-mthumb -Wl,--gc-sections -Wall -lstdc++ -lm -specs=nosys.specs -specs=nano.specs
 compiler.ar.flags=rcs
-compiler.asm.flags=-mthumb -Wall -g -Os 
-compiler.c.flags=-mthumb -Wall -MMD -std=gnu11 -ffunction-sections -g -Os -fno-exceptions
-compiler.cpp.flags=-mthumb -Wall -MMD -std=gnu++11 -ffunction-sections -g -Os -fno-exceptions -fno-rtti
-compiler.elf.flags=-mthumb -g -Wl,--gc-sections -Wall -lstdc++ -lm
 compiler.hex.flags=-Oihex
-compiler.bin.flags=-Obinary
+
 compiler.combine.flags=-u _sbrk -u link -u _close -u _fstat -u _isatty -u _lseek -u _read -u _write -u _exit -u kill -u _getpid
-compiler.c.elf.extra_flags=-specs=nosys.specs -specs=nano.specs {compiler.combine.flags}
-build.common_flags=-mthumb
 
-##===============================================##
-## In there,set the include path,for FrameLib use
+# Compilers
+compiler.c.cmd={compiler.prefix}gcc
+compiler.cpp.cmd={compiler.prefix}g++
+compiler.S.cmd={compiler.prefix}gcc
+compiler.c.elf.cmd={compiler.prefix}g++
+compiler.ar.cmd={compiler.prefix}ar
+compiler.size.cmd={compiler.prefix}size
+compiler.hex.cmd={compiler.prefix}objcopy
 
-compiler.FrameLib.c.flags="-I{build.system.path}/Drivers/CMSIS/Include" "-I{build.system.path}/AT32F403A" "-I{build.system.path}/Drivers/Firmware/inc" "-I{build.system.path}/libcore" "-I{build.system.path}/libcore/config"
+# These can be overridden in platform.local.txt
+compiler.c.extra_flags=
+compiler.cpp.extra_flags=
+compiler.S.extra_flags=
+compiler.c.elf.extra_flags=
+compiler.ar.extra_flags=
+compiler.libraries.ldflags=
 
-##===============================================##
+# This can be overriden in boards.txt
+build.code_debug=0
+build.defines=
+build.extra_flags=-DARDUINO_HOST_OS="{runtime.os}" -DARDUINO_FQBN="{build.fqbn}" -DCORE_DEBUG_LEVEL={build.code_debug} {build.defines}
+build.extra_libs=
+build.chip_variant={build.mcu}
 
-recipe.S.o.pattern="{compiler.path}{compiler.asm.cmd}" {compiler.asm.flags} -mcpu={build.mcu} -c "{source_file}" -o "{object_file}"
+## Compile c files
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.extra_flags} {compiler.c.flags} -mcpu={build.mcu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} -DARDUINO_BOARD="{build.board}" -DARDUINO_VARIANT="{build.variant}" {compiler.cpreprocessor.flags} -DF_PLL_CLOCK_SOURCE={build.f_pll_clock_source} -DF_PLL_MULT={build.f_pll_mult} {build.extra_flags} {compiler.FrameLib.includes} {includes} -c "{source_file}" -o "{object_file}"
 
-recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DF_PLL_CLOCK_SOURCE={build.f_pll_clock_source} -DF_PLL_MULT={build.f_pll_mult} -DF_PLL_OUTPUT_RANGE={build.f_pll_output_range} -DF_HEXT_DIV={build.f_hext_div} -DF_HSI_DIV={build.f_hsi_div} {build.extra_flags} {compiler.FrameLib.c.flags} {includes} -c "{source_file}" -o "{object_file}"
+## Compile c++ files
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.extra_flags} {compiler.cpp.flags} -mcpu={build.mcu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} -DARDUINO_BOARD="{build.board}" -DARDUINO_VARIANT="{build.variant}" {compiler.cpreprocessor.flags} -DF_PLL_CLOCK_SOURCE={build.f_pll_clock_source} -DF_PLL_MULT={build.f_pll_mult} {build.extra_flags} {compiler.FrameLib.includes} {includes} -c "{source_file}" -o "{object_file}"
 
-recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DF_PLL_CLOCK_SOURCE={build.f_pll_clock_source} -DF_PLL_MULT={build.f_pll_mult} -DF_PLL_OUTPUT_RANGE={build.f_pll_output_range} -DF_HEXT_DIV={build.f_hext_div} -DF_HSI_DIV={build.f_hsi_div} {build.extra_flags} {compiler.FrameLib.c.flags} {includes} -c "{source_file}" -o "{object_file}"
+## Compile S files
+recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {compiler.S.extra_flags} {compiler.S.flags} -mcpu={build.mcu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} -DARDUINO_BOARD="{build.board}" -DARDUINO_VARIANT="{build.variant}" {build.extra_flags} {compiler.cpreprocessor.flags} {includes} -c "{source_file}" -o "{object_file}"
 
-recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} "{archive_file_path}" "{object_file}"
+## Create archives
+recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
-recipe.c.combine.pattern="{compiler.path}{compiler.elf.cmd}" {compiler.elf.flags} -mcpu={build.mcu} "-L{build.variant.path}" "-T{build.variant.path}/{build.ldscript}" {object_files} "{archive_file_path}" "{build.variant.path}/{build.variant_system_lib}" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf"
-##recipe.c.combine.pattern="{compiler.path}{compiler.elf.cmd}" {compiler.elf.flags} -mcpu={build.mcu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -lgcc -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols -Wl,--start-group {object_files} -Wl,--whole-archive "{archive_file_path}" -Wl,--no-whole-archive -Wl,--end-group
+## Combine gc-sections, archives, and objects
+#recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} -mcpu={build.mcu} "-L{build.variant.path}" "-T{build.variant.path}/{build.ldscript}" -Wl,--start-group {object_files} "{archive_file_path}" {build.extra_libs} {compiler.libraries.ldflags} -Wl,--end-group {compiler.combine.flags} -o "{build.path}/{build.project_name}.elf"
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} -mcpu={build.mcu} "-L{build.variant.path}" "-T{build.variant.path}/{build.ldscript}" -Wl,--start-group {object_files} "{archive_file_path}" {build.extra_libs} "{build.variant.path}/{build.variant_system_lib}" {compiler.libraries.ldflags} -Wl,--end-group {compiler.combine.flags} -o "{build.path}/{build.project_name}.elf"
+##recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} -mcpu={build.mcu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -lgcc -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols -Wl,--start-group {object_files} -Wl,--whole-archive "{archive_file_path}" -Wl,--no-whole-archive -Wl,--end-group
 
-recipe.objcopy.eep.pattern=
-
+## Create hex
 recipe.objcopy.hex.pattern="{compiler.path}{compiler.hex.cmd}" {compiler.hex.flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
 
 ## Compute size
@@ -57,6 +81,9 @@ recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build
 recipe.size.regex=^(?:\.text|\.data|\.rodata|\.text.align|\.ARM.exidx)\s+([0-9]+).*
 recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
 
+## Save hex
+recipe.output.tmp_file={build.project_name}.hex
+recipe.output.save_file={build.project_name}.{build.variant}.hex
 
 # Uploader tools
 # -------------------
